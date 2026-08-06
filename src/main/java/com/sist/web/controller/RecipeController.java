@@ -58,11 +58,32 @@ public class RecipeController {
 			page="1";
 		
 		List<Recipe> list = rService.recipeListData(Integer.parseInt(page));
-		int[] pages = rService.getPageData(Integer.parseInt(page));
+		int[] pages = rService.getPageData(Integer.parseInt(page),12);
 		
 		model.addAttribute("list",list);
 		model.addAttribute("pages",pages);
 		model.addAttribute("main_html","main/home");
+		model.addAttribute("curpage",pages[0]);
+		model.addAttribute("totalpage",pages[1]);
+		model.addAttribute("startPage",pages[2]);
+		model.addAttribute("endPage",pages[3]);
+		
+		return "main/main";
+	}
+	
+	@GetMapping("/recipe/chef_list")
+	public String recipe_chef_list(@RequestParam(name = "page",required = false)String page,Model model)
+	{
+		
+		if(page == null)
+			page="1";
+		
+		List<Chef> list = rService.chefListData(Integer.parseInt(page));
+		int[] pages = rService.getPageData(Integer.parseInt(page),20);
+		
+		model.addAttribute("list",list);
+		model.addAttribute("pages",pages);
+		model.addAttribute("main_html","recipe/chef");
 		model.addAttribute("curpage",pages[0]);
 		model.addAttribute("totalpage",pages[1]);
 		model.addAttribute("startPage",pages[2]);
