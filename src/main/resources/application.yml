@@ -2,7 +2,7 @@
 #spring seetting => DB (datasource) , JPA , ThymeLeaf , Mybatis , Logginh , security , springAI , websocket = 카프카
 spring: 
   datasource:
-    url: jdbc:oracle:thin:@localhost:1521:XE
+    url: jdbc:oracle:thin:@192.168.0.26:1521:XE
     username: hr
     password: happy
     driver-class-name: oracle.jdbc.driver.OracleDriver
