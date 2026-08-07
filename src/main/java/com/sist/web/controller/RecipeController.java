@@ -59,7 +59,7 @@ public class RecipeController {
 		
 		List<Recipe> list = rService.recipeListData(Integer.parseInt(page));
 		int[] pages = rService.getPageData(Integer.parseInt(page),12);
-		
+		int count = rService.recipeCount();
 		model.addAttribute("list",list);
 		model.addAttribute("pages",pages);
 		model.addAttribute("main_html","main/home");
@@ -67,7 +67,7 @@ public class RecipeController {
 		model.addAttribute("totalpage",pages[1]);
 		model.addAttribute("startPage",pages[2]);
 		model.addAttribute("endPage",pages[3]);
-		
+		model.addAttribute("count",count);
 		return "main/main";
 	}
 	
@@ -89,6 +89,44 @@ public class RecipeController {
 		model.addAttribute("startPage",pages[2]);
 		model.addAttribute("endPage",pages[3]);
 		
+		return "main/main";
+	}
+	
+	@GetMapping("/recipe/find")
+	public String recipe_find(Model model)
+	{
+		model.addAttribute("main_html","recipe/find");
+		
+		return "main/main";
+	}
+	
+	@GetMapping("/recipe/chef_recipe")
+	public String chef_recipe(@RequestParam("chef")String chef, Model model)
+	{
+		model.addAttribute("chef",chef);
+		model.addAttribute("main_html","recipe/chef_recipe");
+		return "main/main";
+	}
+	
+	@GetMapping("recipe/detail")
+	public String recipe_detail(@RequestParam("no")int no,Model model)
+	{
+		RecipeDetail vo = rService.findByNo(no);
+		List<String> mList = new ArrayList<String>();
+		List<String> iList = new ArrayList<String>();
+		
+		String[] makes = vo.getFoodmake().split("\n");
+		for(String s:makes)
+		{
+			StringTokenizer st = new StringTokenizer(s,"^");
+			mList.add(st.nextToken());
+			iList.add(st.nextToken());
+		}
+		
+		model.addAttribute("mList",mList);
+		model.addAttribute("iList",iList);
+		model.addAttribute("vo",vo);
+		model.addAttribute("main_html","recipe/detail");
 		return "main/main";
 	}
 }

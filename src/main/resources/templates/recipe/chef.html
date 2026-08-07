@@ -22,16 +22,24 @@
 							<table class="table" th:each="vo:${list}">
 								<tr>
 									<td width="30%" class="text-center" rowspan="2">
-										<img th:src="${vo.poster}" class="img-circle" style="width: 100px;height: 100px">
+										<a th:href="@{/recipe/chef_recipe(chef=${vo.chef})}">
+											<img th:src="${vo.poster}" class="img-circle" style="width: 100px;height: 100px">
+										</a>
 									</td>
-									<td colspan="4" style="color:orange;"><h3>[[${vo.chef}]]</h3></td>
+									<td colspan="4" style="color:orange;">
+										<h3>
+											<a th:href="@{/recipe/chef_recipe(chef=${vo.chef})}">
+												[[${vo.chef}]]
+											</a>
+										</h3>
+									</td>
 								</tr>
 								<tr>
 									<td class="text-center">
 										<img src="/icon/m1.png">[[${vo.mem_cont1}]]
 									</td>
 									<td class="text-center">
-										<img src="/icon/m2.png">[[${vo.mem_cont7}]]
+										<img src="/icon/m2.png">[[${vo.mem_cont3}]]
 									</td>
 									<td class="text-center">
 										<img src="/icon/m3.png">[[${vo.mem_cont7}]]
