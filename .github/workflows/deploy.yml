@@ -19,15 +19,32 @@ jobs:
           java-version: '21'
       # gradlew 권한 부여
       - run: chmod +x gradlew
-      # 빌드 
-      - run: ./gradlew clean build -x test
+      
+      #----------------------------------- 빌드 일반 java -jar
+      #- run: ./gradlew clean build -x test
       # 실행 => jar파일 생성 => java -jar app.jar
+      #- run: |
+          #PID=$(lsof -t -i:8080 || true)
+          #if [ -n "$PID" ]; then
+             #kill -15 "$PID" || true
+          #fi
+      #- run: nohup java -jar build/libs/SpringThymeLeafDockerProject-0.0.1-SNAPSHOT.jar > app.log 2>&1 &
+        #env:
+          #RUNNER_TRACKING_ID: ""
+          
+      #---------------------------------- 빌드 docker
+      - run: ./gradlew clean build -x test
+      # Doker이미지 생성
+      - run: docker build -t mini-app .
+      # 기존의 docker 프로세스 삭제
       - run: |
-          PID=$(lsof -t -i:8080 || true)
-          if [ -n "$PID" ]; then
-             kill -15 "$PID" || true
-          fi
-      - run: nohup java -jar build/libs/SpringThymeLeafDockerProject-0.0.1-SNAPSHOT.jar > app.log 2>&1 &
+          docker stop mini-app || true
+          docker rm mini-app
+      # 새로운 docker 실행(컨테이너)
+      - run: |
+          docker run --name mini-app -d -p 8080:8080 mini-app
         env:
           RUNNER_TRACKING_ID: ""
+
+
       
