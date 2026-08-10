@@ -31,7 +31,7 @@
 			</div>
 			<div class="row" style="margin-top: 10px">
 				<div class="col-sm-3" v-for="(vo,index) in find_list" :key="index">
-					<a href="#">
+					<a :href="'/recipe/detail?no='+vo.no">
 						<div class="thumbnail">
 							<img :src="vo.poster" :title="vo.title" style="width: 250px;height: 150px;">
 							<p>{{vo.chef}}</p>

@@ -1,13 +1,23 @@
 #port 지정 => default 8080
 #spring seetting => DB (datasource) , JPA , ThymeLeaf , Mybatis , Logginh , security , springAI , websocket = 카프카
+server:
+  servlet:
+    context-path: /
 spring: 
+  #파일 업로드
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 100MB
+      max-request-size: 100MB
+           
   datasource:
-    url: jdbc:oracle:thin:@192.168.0.26:1521:XE
+    url: jdbc:oracle:thin:@localhost:1521:XE
     username: hr
     password: happy
     driver-class-name: oracle.jdbc.driver.OracleDriver
 
-#파일 업로드
+
 
 
 # JAP -> Hibernate -> SQL문장 생성 -> Oracle DB 실행
@@ -28,6 +38,9 @@ spring:
     prefix: classpath:templates/
     suffix: .html
     mode: HTML
+
+file:
+  upload_dir: C:/upload
 
 mybatis: 
   type-aliases-package: com.sist.web.vo
