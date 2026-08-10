@@ -39,7 +39,7 @@ jobs:
       # 기존의 docker 프로세스 삭제
       - run: |
           docker stop mini-app || true
-          docker rm mini-app
+          docker rm mini-app || true
       # 새로운 docker 실행(컨테이너)
       - run: |
           docker run --name mini-app -d -p 8080:8080 mini-app
