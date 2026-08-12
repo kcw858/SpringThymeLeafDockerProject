@@ -1,0 +1,64 @@
+# ⚙️ 환경
++ Sts 5.2.0
++ Java 21
++ git Action
+
+# ▶️ 실행 과정
+1. self-hosted로 실행
+2. 프로젝트를 main브런치로 push
+3. gradlew build
+4. Doker이미지 생성 (docker build -t mini-app .)
+5. 기존의 docker 프로세스가 작동중일 수 있으니 삭제
+6. 새로운 docker 실행(컨테이너)
+   
+
+# 📂 yml파일
+```
+name: Deploy Git Action
+# 언제부터 배포 시작 = master에서 push할때마다 배포
+on:
+  push:
+    branches:
+      - main
+# 작업 지시 
+jobs:
+  deploy:
+    runs-on: self-hosted #현재 Ubuntu에 배포 
+    #어떤 순서로 진행할지 
+    steps:
+      # 소스 코드 다운로드 = clone과 동일 
+      - uses: actions/checkout@v4
+      # JDK 21버전 확인 
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      # gradlew 권한 부여
+      - run: chmod +x gradlew
+      
+      #----------------------------------- 빌드 일반 java -jar
+      #- run: ./gradlew clean build -x test
+      # 실행 => jar파일 생성 => java -jar app.jar
+      #- run: |
+          #PID=$(lsof -t -i:8080 || true)
+          #if [ -n "$PID" ]; then
+             #kill -15 "$PID" || true
+          #fi
+      #- run: nohup java -jar build/libs/SpringThymeLeafDockerProject-0.0.1-SNAPSHOT.jar > app.log 2>&1 &
+        #env:
+          #RUNNER_TRACKING_ID: ""
+          
+      #---------------------------------- 빌드 docker
+      - run: ./gradlew clean build -x test
+      # Doker이미지 생성
+      - run: docker build -t mini-app .
+      # 기존의 docker 프로세스 삭제
+      - run: |
+          docker stop mini-app || true
+          docker rm mini-app || true
+      # 새로운 docker 실행(컨테이너)
+      - run: |
+          docker run --name mini-app -d -p 8080:8080 mini-app
+        env:
+          RUNNER_TRACKING_ID: ""
+```
